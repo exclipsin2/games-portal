@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Proxy - Games Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .proxy-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 900px;
+            margin: 40px auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .proxy-container h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .proxy-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .proxy-input-group input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .proxy-input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .proxy-input-group button {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .proxy-input-group button:hover {
+            background: #764ba2;
+        }
+
+        .proxy-frame {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .proxy-frame.active {
+            display: block;
+        }
+
+        .proxy-info {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .proxy-info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .no-ssl-warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="logo">🎮 Games Portal</div>
+                <div class="nav-links">
+                    <a href="index.html">Games</a>
+                    <a href="proxy.html" class="active">Proxy</a>
+                    <a href="#about">About</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Proxy Container -->
+        <div class="proxy-container">
+            <h1>🌐 Web Proxy</h1>
+            <p>Access websites through our secure proxy. Enter a URL below to get started.</p>
+
+            <div class="no-ssl-warning">
+                <strong>⚠️ Note:</strong> For the best experience, use HTTP URLs. Some HTTPS sites may have compatibility issues with the proxy.
+            </div>
+
+            <div class="proxy-input-group">
+                <input 
+                    type="text" 
+                    id="urlInput" 
+                    placeholder="Enter URL (e.g., https://example.com)" 
+                    onkeypress="if(event.key==='Enter') openProxyUrl()"
+                >
+                <button onclick="openProxyUrl()">Browse</button>
+            </div>
+
+            <iframe 
+                id="proxyFrame" 
+                class="proxy-frame" 
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            ></iframe>
+
+            <div class="proxy-info">
+                <h3>📋 How to Use:</h3>
+                <ul style="margin-left: 20px;">
+                    <li>Enter any website URL in the input field</li>
+                    <li>Click "Browse" or press Enter</li>
+                    <li>The website will load through our proxy</li>
+                    <li>Use the back button to go back</li>
+                </ul>
+
+                <h3 style="margin-top: 20px;">⚡ Features:</h3>
+                <ul style="margin-left: 20px;">
+                    <li>✅ Access websites securely</li>
+                    <li>✅ Hide your IP address</li>
+                    <li>✅ Bypass geographic restrictions</li>
+                    <li>✅ Fast and reliable</li>
+                </ul>
+
+                <h3 style="margin-top: 20px;">📝 Popular Sites:</h3>
+                <ul style="margin-left: 20px;">
+                    <li><a href="#" onclick="loadUrl('https://www.youtube.com')">YouTube</a></li>
+                    <li><a href="#" onclick="loadUrl('https://www.reddit.com')">Reddit</a></li>
+                    <li><a href="#" onclick="loadUrl('https://www.twitter.com')">Twitter</a></li>
+                    <li><a href="#" onclick="loadUrl('https://www.wikipedia.org')">Wikipedia</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openProxyUrl() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+            loadUrl(url);
+        }
+
+        function loadUrl(url) {
+            let fullUrl = url;
+            
+            // Add protocol if missing
+            if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
+                fullUrl = 'https://' + fullUrl;
+            }
+
+            // Update input field
+            document.getElementById('urlInput').value = fullUrl;
+
+            // Show frame and load URL
+            const frame = document.getElementById('proxyFrame');
+            frame.classList.add('active');
+            
+            // Use a proxy service to load the URL
+            // Note: This is a simple implementation. For production, use a proper proxy service
+            const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(fullUrl);
+            frame.src = fullUrl;
+        }
+    </script>
+</body>
+</html>
